@@ -42,19 +42,19 @@ const rollupResource = (dependencies: string[]) => ({
 })
 
 
-const doRollup = async(from: string): Promise<string> => {
+const doRollup = async(input: string, intro: string): Promise<string> => {
 
 	const dependencies = [];
 
 	const bundle = await rollup({
-		input: from,
+		input,
 		logLevel: 'silent',
 		plugins: [
 			rollupResource(dependencies)
-		]
+		],
 	});
 
-	const { output } = await bundle.generate({ format: 'iife', });
+	const { output } = await bundle.generate({ format: 'iife', intro });
 
 	return output.map(ou => ou?.['code']).join('\r\n');
 

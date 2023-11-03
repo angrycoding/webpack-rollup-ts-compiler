@@ -3,6 +3,7 @@ import WebPack, { Compiler, Compilation } from 'webpack';
 
 interface Options {
 	to?: string;
+	intro?: string;
 	postprocess?: (result: string) => string;
 }
 	
@@ -19,7 +20,7 @@ class WebPackRollupTsCompiler {
 	apply = (compiler: Compiler) => {
 		compiler.hooks.thisCompilation.tap('WebPackRollupTsCompiler', async(compilation: Compilation) => {
 			const { from, options } = this;
-			let result = await doRollup(from);
+			let result = await doRollup(from, options?.intro || '');
 			if (options?.postprocess) result = options.postprocess(result);
 			if (options?.to) compilation.emitAsset(options.to, new WebPack.sources.RawSource(result || ''));
 		});
